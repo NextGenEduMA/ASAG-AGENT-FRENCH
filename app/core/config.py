@@ -7,6 +7,14 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     PROJECT_NAME: str = "ASAG Agent"
 
+    # Paramètres d'environnement supplémentaires
+    ENVIRONMENT: str = "development"
+    DEBUG: bool = True
+    HOST: str = "0.0.0.0"
+    PORT: int = 8000
+    LOG_LEVEL: str = "INFO"
+    LOG_FILE: str = "logs/asag.log"
+
     # MongoDB settings
     MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://localhost:27017")
     MONGO_DB_NAME: str = os.getenv("MONGO_DB_NAME", "asag_db")
@@ -40,6 +48,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"  # Optionnellement, vous pouvez permettre des champs supplémentaires
 
 
 settings = Settings()

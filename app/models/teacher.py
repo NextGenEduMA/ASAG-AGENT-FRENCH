@@ -8,23 +8,18 @@ from pydantic_core import core_schema
 
 class PyObjectId(ObjectId):
     @classmethod
-    def __get_pydantic_json_schema__(cls, core_schema: Any, handler: GetJsonSchemaHandler) -> JsonSchemaValue:
-        schema = handler(core_schema)
-        schema.update(type="string")
-        return schema
+    def __get_validators__(cls):
+        yield cls.validate
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type: Any, handler: Any) -> Any:
-        return core_schema.no_info_before_validator_function(
-            cls.validate,
-            core_schema.str_schema()
-        )
-
-    @classmethod
-    def validate(cls, v: Any) -> ObjectId:
+    def validate(cls, v):
         if not ObjectId.is_valid(v):
             raise ValueError("Invalid ObjectId")
         return ObjectId(v)
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(type="string")
 
 class TeacherBase(BaseModel):
     firstName: str

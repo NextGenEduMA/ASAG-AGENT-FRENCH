@@ -7,6 +7,8 @@ import logging
 import sys
 from pathlib import Path
 
+from bson import ObjectId
+
 # Ajouter le répertoire parent au path pour les imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -14,6 +16,8 @@ from app.db.mongodb import connect_to_mongo, close_mongo_connection
 from app.models.source_text import SourceTextCreate
 from app.db.repositories.text_repository import TextRepository
 from app.api.dependencies import get_asag_service
+
+teacher_id = ObjectId()  # Génère un nouvel ObjectId
 
 # Configuration du logging
 logging.basicConfig(
@@ -37,7 +41,7 @@ SAMPLE_TEXTS = [
         "grade": "CE1",
         "tags": ["nature", "animaux", "magie"],
         "difficulty": 2,
-        "teacherId": "60d5ec9f0b4b0b3e3c7a1b3c",  # ID fictif
+        "teacherId": teacher_id,  # ID fictif
         "isActive": True
     },
     {
@@ -50,7 +54,7 @@ SAMPLE_TEXTS = [
         "grade": "CP",
         "tags": ["saisons", "nature", "temps"],
         "difficulty": 1,
-        "teacherId": "60d5ec9f0b4b0b3e3c7a1b3c",  # ID fictif
+        "teacherId": teacher_id,  # ID fictif
         "isActive": True
     },
     {
@@ -63,7 +67,7 @@ SAMPLE_TEXTS = [
         "grade": "CM2",
         "tags": ["planète", "eau", "environnement"],
         "difficulty": 4,
-        "teacherId": "60d5ec9f0b4b0b3e3c7a1b3c",  # ID fictif
+        "teacherId": teacher_id,  # ID fictif
         "isActive": True
     }
 ]
@@ -88,8 +92,7 @@ async def seed_database():
             logger.info(f"Traitement du texte: {text_data['title']}")
 
             # Créer l'objet SourceTextCreate
-            #text_create = SourceTextCreate(**text_data)
-            text_create = SourceTextCreate(**{**text_data, "teacherId": str(text_data["teacherId"])})
+            text_create = SourceTextCreate(**text_data)
 
             # Traiter le texte avec le service ASAG
             try:
