@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  #app:
+    #build:
+      #context: ..
+      #dockerfile: docker/Dockerfile
+    #ports:
+      #- "8000:8000"
+    #environment:
+      #- MONGO_URI=mongodb://mongo:27017
+      #- MONGO_DB_NAME=asag_db
+      #- USE_GPU=false
+    #volumes:
+      #- ../app:/app/app
+    #depends_on:
+      #- mongo
+
+  mongo:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
