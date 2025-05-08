@@ -17,8 +17,8 @@ class EmbeddingProcessor:
 
     def __init__(self):
         self.api_key = os.getenv("EMBEDDING_API_KEY", "")
-        self.model_name = os.getenv("EMBEDDING_MODEL_NAME", "intfloat/multilingual-e5-large")
-        self.provider = os.getenv("EMBEDDING_PROVIDER", "huggingface")
+        self.model_name = os.getenv("EMBEDDING_MODEL_NAME", "text-embedding-ada-002")
+        self.provider = os.getenv("EMBEDDING_PROVIDER", "openai")
 
         # Initialiser le modèle local si nécessaire
         self.local_model = None

@@ -4,7 +4,7 @@ from bson import ObjectId
 from app.models.teacher import PyObjectId
 
 class AnswerTemplateBase(BaseModel):
-    questionId: PyObjectId
+    questionId: Optional[PyObjectId] = None  # Rendre ce champ optionnel
     modelAnswer: str
     keyElements: List[str] = []
     acceptableSynonyms: List[str] = []

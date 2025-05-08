@@ -16,8 +16,8 @@ class LLMClient:
 
     def __init__(self):
         self.api_key = os.getenv("LLM_API_KEY", "")
-        self.model_name = os.getenv("LLM_MODEL_NAME", "mistralai/Mistral-7B-Instruct-v0.2")
-        self.provider = os.getenv("LLM_PROVIDER", "huggingface")
+        self.model_name = os.getenv("LLM_MODEL_NAME", "gpt-3.5-turbo")
+        self.provider = os.getenv("LLM_PROVIDER", "openai")
 
         # Configuration des endpoints selon le fournisseur
         if self.provider == "openai":
@@ -27,7 +27,7 @@ class LLMClient:
         elif self.provider == "azure":
             self.endpoint = os.getenv("LLM_API_ENDPOINT")
             self.deployment_name = os.getenv("LLM_DEPLOYMENT_NAME", "gpt-4")
-
+        logger.info(f"Hugging Face API key: {self.api_key}")
         logger.info(f"LLM Client initialisé avec le modèle {self.model_name} et le fournisseur {self.provider}")
 
     async def generate_text(self, prompt: str, max_tokens: int = 500, temperature: float = 0.7) -> str:
@@ -117,13 +117,20 @@ class LLMClient:
             }
         }
 
+        # Afficher plus d'informations pour le débogage
+        logger.info(f"Endpoint: {self.endpoint}")
+        logger.info(f"Payload: {payload}")
+
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(self.endpoint, headers=headers, json=payload) as response:
+                    response_text = await response.text()
+                    logger.info(f"API response status: {response.status}")
+                    logger.info(f"API response body: {response_text}")
+
                     if response.status != 200:
-                        error_msg = await response.text()
-                        logger.error(f"Erreur Hugging Face: {error_msg}")
-                        raise Exception(f"Erreur API Hugging Face: {response.status} - {error_msg}")
+                        logger.error(f"Erreur Hugging Face: {response_text}")
+                        raise Exception(f"Erreur API Hugging Face: {response.status} - {response_text}")
 
                     result = await response.json()
 
