@@ -2,6 +2,8 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from typing import Optional
 
+from app.db.repositories.student_repository import StudentRepository
+from app.services.student_service import StudentService
 from app.services.text_service import TextService
 from app.services.question_service import QuestionService
 from app.services.answer_service import AnswerService
@@ -149,3 +151,11 @@ async def get_current_student(
     )
 
     return student
+
+def get_student_repository() -> StudentRepository:
+    return StudentRepository()
+
+def get_student_service(
+        student_repository: StudentRepository = Depends(get_student_repository)
+) -> StudentService:
+    return StudentService(student_repository)

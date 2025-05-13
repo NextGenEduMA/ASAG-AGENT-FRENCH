@@ -15,7 +15,7 @@ class LLMClient:
     """
 
     def __init__(self):
-        self.api_key = os.getenv("LLM_API_KEY", "")
+        self.api_key = os.getenv("LLM_API_KEY", "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")
         self.model_name = os.getenv("LLM_MODEL_NAME", "gpt-3.5-turbo")
         self.provider = os.getenv("LLM_PROVIDER", "openai")
 

@@ -16,7 +16,7 @@ class EmbeddingProcessor:
     """
 
     def __init__(self):
-        self.api_key = os.getenv("EMBEDDING_API_KEY", "")
+        self.api_key = os.getenv("EMBEDDING_API_KEY", "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")
         self.model_name = os.getenv("EMBEDDING_MODEL_NAME", "text-embedding-ada-002")
         self.provider = os.getenv("EMBEDDING_PROVIDER", "openai")
 

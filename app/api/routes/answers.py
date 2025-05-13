@@ -5,7 +5,8 @@ from app.models.student_answer import StudentAnswer, StudentAnswerCreate, Studen
 from app.models.student import Student
 from app.models.feedback import Feedback, FeedbackUpdate
 from app.services.answer_service import AnswerService
-from app.api.dependencies import get_answer_service, get_current_student
+from app.api.dependencies import get_answer_service, get_current_student, get_student_service
+from app.services.student_service import StudentService
 
 router = APIRouter(tags=["answers"])
 
@@ -13,8 +14,9 @@ router = APIRouter(tags=["answers"])
 @router.post("/submit", status_code=status.HTTP_201_CREATED)
 async def submit_answer(
         answer_in: StudentAnswerCreate,
-        student: Student = Depends(get_current_student),
-        answer_service: AnswerService = Depends(get_answer_service)
+        #student: Student = Depends(get_current_student),
+        answer_service: AnswerService = Depends(get_answer_service),
+        student_service: StudentService = Depends(get_student_service)
 ):
     """
     Soumet une réponse d'élève, l'analyse et génère un feedback.
@@ -23,7 +25,11 @@ async def submit_answer(
         answer_in: Données de la réponse à soumettre
     """
     try:
+        student = await student_service.get_student(str(answer_in.studentId))
         result = await answer_service.submit_answer(answer_in, student)
+        # Convertir manuellement les ObjectId en strings
+        from app.utils.json_utils import convert_objectid_to_str
+        result = convert_objectid_to_str(result)
         return result
     except ValueError as e:
         raise HTTPException(
