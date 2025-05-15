@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     LOG_FILE: str = "logs/asag.log"
 
     # MongoDB settings
-    MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+    MONGO_URI: str = os.getenv("MONGO_URI", "mongodb+srv://asag:sangareba@cluster0.8uz7e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     MONGO_DB_NAME: str = os.getenv("MONGO_DB_NAME", "asag_db")
 
     # NLP Model settings
